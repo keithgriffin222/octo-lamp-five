@@ -44,6 +44,16 @@ window.addEventListener('DOMContentLoaded', () => {
       o: ['Sydney', 'Canberra', 'Melbourne', 'Perth'],
       a: 1,
     },
+    {
+      q: 'What is the square root of 4',
+      o: ['1', '2', '3', '4'],
+      a: 1,
+    },
+    {
+      q: 'What is the biggest animal on Earth',
+      o: ['Giraffe', 'Elephant', 'Blue Whale', 'Great White Shark'],
+      a: 2,
+    },
   ];
 
   // function to Display the quiz questions and answers from the object
@@ -63,28 +73,73 @@ window.addEventListener('DOMContentLoaded', () => {
     });
   };
 
-  // Calculate the score
-  const calculateScore = () => {
-    let score = 0;
-    quizArray.map((quizItem, index) => {
-      for (let i = 0; i < 4; i++) {
-        //highlight the li if it is the correct answer
-        let li = `li_${index}_${i}`;
-        let r = `radio_${index}_${i}`;
-        liElement = document.querySelector('#' + li);
-        radioElement = document.querySelector('#' + r);
-
-        if (quizItem.a == i) {
-          //change background color of li element here
-        }
-
-        if (radioElement.checked) {
-          // code for task 1 goes here
-        }
+// Calculate the score
+const calculateScore = () => {
+  let score = 0;
+  quizArray.map((quizItem, index) => {
+    for (let i = 0; i < 4; i++) {
+      //highlight the li if it is the correct answer
+      let li = `li_${index}_${i}`;
+      let r = `radio_${index}_${i}`;
+      liElement = document.querySelector('#' + li);
+      radioElement = document.querySelector('#' + r);
+      
+      if (quizItem.a == i) {
+        //change background color of li element here
+        liElement.style.background = "green";
       }
-    });
-  };
 
-  // call the displayQuiz function
+      if (radioElement.checked) {
+        // code for task 1 goes here
+        if( quizItem.a == i ) {
+          score += 1;
+      }
+    }
+  }
+    document.querySelector('#score').innerHTML = `You answered ${score} questions correctly! `; 
+  });
+};
+
+// call the displayQuiz function
   displayQuiz();
+
+// Submit button & score calculation
+btnSubmit.addEventListener('click', calculateScore);
+
+//Reset button
+ btnReset.addEventListener('click', resetWindow);
+ function resetWindow() {
+   window.location.href = "./index.html";
+ };
+
+ //Countdown timer
+document.getElementById('time').innerHTML = 01 + ":" + 02;
+function timer() {
+  let currentTime = document.getElementById('time').innerHTML;
+  let countDown = currentTime.split(/[:]+/);
+  let min = countDown[0];
+  let sec = secondsCount((countDown[1] - 1));
+  if(sec == 59){
+    min = min - 1
+  }
+  if(min<0){
+    btnSubmit.click();
+    return
+  }
+  document.getElementById('time').innerHTML = min + ":" + sec;
+  setTimeout(timer, 1000);
+}
+function secondsCount(sec) {
+  if (sec < 10 && sec >= 0) {
+    sec = "0" + sec
+  };
+  if (sec < 0) {
+    sec = "59"
+  };
+  return sec;
+}
+
+//Call the timer function
+timer();
 });
+
